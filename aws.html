@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS SAA Study Plan — July 8</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F7F6F3; --surface:#FFFFFF; --surface2:#F1EFE9;
+  --border:#E8E5DE; --border2:#D5D0C5;
+  --text:#1A1916; --text2:#6B6760; --text3:#9E9A92;
+  --accent:#E8622A; --accent-soft:#FDF0EA;
+  --storage:#2E7BE0;   --storage-bg:#EBF2FD;
+  --compute:#6B6760;   --compute-bg:#F1EFE9;
+  --db:#7B5CF0;        --db-bg:#F0EEFE;
+  --appint:#148A5E;    --appint-bg:#E5F6EF;
+  --security:#C4401C;  --security-bg:#FDEEE9;
+  --mgmt:#4A7C1F;      --mgmt-bg:#EDF5E2;
+  --data:#B0397A;      --data-bg:#FCEEF6;
+  --migration:#9A5A0A; --migration-bg:#FDF3E5;
+  --design:#0F7E6B;    --design-bg:#E4F4F1;
+  --mock:#C47D0A;      --mock-bg:#FDF5E4;
+  --revision:#C4401C;  --revision-bg:#FDEEE9;
+  --buffer:#6B6760;    --buffer-bg:#F1EFE9;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:2.5rem 2rem 0;position:sticky;top:0;z-index:100}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:400;color:var(--text);line-height:1.15}
+h1 em{font-style:italic;color:var(--accent)}
+.exam-badge{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
+.exam-badge .elabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.exam-badge .edate{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:500;color:var(--text)}
+.exam-badge .ecount{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace}
+.stats-bar{display:flex;gap:0;border-top:1px solid var(--border);overflow-x:auto}
+.stat{padding:.75rem 1.25rem;border-right:1px solid var(--border);flex-shrink:0}
+.stat:last-child{border-right:none}
+.stat-val{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:400;color:var(--text);line-height:1}
+.stat-val span{font-size:.9rem;color:var(--text3)}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace;letter-spacing:.04em}
+
+.progress-section{padding:1.25rem 2rem;background:var(--surface);border-bottom:1px solid var(--border)}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.progress-title{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.progress-pct{font-family:'Fraunces',serif;font-size:1rem;color:var(--text2)}
+.progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+.mock-row{display:flex;align-items:center;gap:.5rem;margin-top:.9rem;flex-wrap:wrap}
+.mock-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-right:.25rem}
+.mpip{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);transition:all .3s}
+.mpip.done{background:var(--mock);border-color:var(--mock);color:#fff}
+.mpip-date{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px;padding:.85rem 2rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+.filter-bar{display:flex;gap:6px;padding:.85rem 2rem;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;flex-wrap:wrap}
+.filter-btn{font-family:'DM Mono',monospace;font-size:11px;padding:4px 12px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap}
+.filter-btn:hover{background:var(--surface2)}
+.filter-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+.toolbar{display:flex;gap:8px;padding:.6rem 2rem;border-bottom:1px solid var(--border);background:var(--bg);align-items:center;flex-wrap:wrap}
+.toolbar-btn{font-family:'DM Mono',monospace;font-size:11px;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;letter-spacing:.04em;transition:all .15s}
+.toolbar-btn:hover{border-color:var(--text2)}
+.toolbar-right{margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+
+.main{padding:1.5rem 2rem 4rem;max-width:920px}
+
+.phase{margin-bottom:1.75rem}
+.phase-header{display:flex;align-items:center;gap:.6rem;padding:.4rem 0;margin-bottom:.4rem;cursor:pointer;user-select:none}
+.phase-toggle{font-size:10px;color:var(--text3);transition:transform .2s;flex-shrink:0;width:14px}
+.phase-toggle.open{transform:rotate(90deg)}
+.phase-name{font-family:'Fraunces',serif;font-size:1rem;font-weight:400;color:var(--text2)}
+.phase-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-left:auto}
+.phase-prog{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);flex-shrink:0}
+
+.phase-days{display:flex;flex-direction:column;gap:4px;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)}
+.phase-days.collapsed{max-height:0 !important}
+
+.day-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:border-color .15s,box-shadow .15s;overflow:hidden}
+.day-card:hover{border-color:var(--border2);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.day-card.done{opacity:.45}
+.day-card.offday{border-left:3px solid var(--design)}
+.day-card.examday{border:2px solid var(--accent)}
+.day-card.today-card{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+.card-inner{display:flex;align-items:stretch}
+.date-block{min-width:58px;padding:.85rem .65rem;text-align:center;border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;background:var(--surface2)}
+.date-num{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:400;color:var(--text);line-height:1}
+.date-mon{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.date-dow{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);margin-top:1px}
+
+.card-body{padding:.7rem 1rem;flex:1;min-width:0}
+.card-title-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:.3rem}
+.card-title{font-size:13.5px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+.pill{display:inline-flex;align-items:center;font-family:'DM Mono',monospace;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;letter-spacing:.03em;white-space:nowrap}
+.pill-today{background:var(--accent);color:#fff}
+.pill-offday{background:var(--design-bg);color:var(--design)}
+.pill-mock-badge{background:var(--mock-bg);color:var(--mock)}
+.tag-storage{background:var(--storage-bg);color:var(--storage)}
+.tag-compute{background:var(--compute-bg);color:var(--compute)}
+.tag-db{background:var(--db-bg);color:var(--db)}
+.tag-appint{background:var(--appint-bg);color:var(--appint)}
+.tag-security{background:var(--security-bg);color:var(--security)}
+.tag-mgmt{background:var(--mgmt-bg);color:var(--mgmt)}
+.tag-data{background:var(--data-bg);color:var(--data)}
+.tag-migration{background:var(--migration-bg);color:var(--migration)}
+.tag-design{background:var(--design-bg);color:var(--design)}
+.tag-mock{background:var(--mock-bg);color:var(--mock)}
+.tag-revision{background:var(--revision-bg);color:var(--revision)}
+.tag-buffer{background:var(--buffer-bg);color:var(--buffer)}
+
+.card-lessons{font-size:12px;color:var(--text2);line-height:1.7}
+.sep{color:var(--text3);margin:0 1px}
+.card-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);margin-top:.3rem;letter-spacing:.03em}
+.card-hours{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);margin-top:2px}
+
+.check-block{padding:.7rem .75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.check-circle{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .2s}
+.check-circle.checked{background:var(--appint);border-color:var(--appint);color:#fff}
+
+.exam-final{margin-top:2rem;background:var(--surface);border:2px solid var(--accent);border-radius:10px;padding:2rem;display:flex;align-items:center;gap:1.5rem}
+.exam-final-date{font-family:'Fraunces',serif;font-size:3.5rem;font-weight:300;color:var(--accent);line-height:1;flex-shrink:0}
+.exam-final-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.25rem}
+.exam-final-title{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:400;color:var(--text)}
+.exam-final-note{font-size:13px;color:var(--text2);margin-top:.3rem}
+
+@media(max-width:600px){
+  .header{padding:1.5rem 1rem 0}
+  .main{padding:1rem 1rem 3rem}
+  .legend,.filter-bar,.toolbar{padding-left:1rem;padding-right:1rem}
+  .progress-section{padding:1rem}
+  h1{font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="eyebrow">AWS SAA-C03 · Study Plan</div>
+      <h1>Road to <em>Certified</em><br>Solutions Architect</h1>
+    </div>
+    <div class="exam-badge">
+      <div class="elabel">Exam date</div>
+      <div class="edate">8 July 2026</div>
+      <div class="ecount" id="countdown">— days away</div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-val" id="s-done">0 <span>/ 33</span></div><div class="stat-lbl">Days done</div></div>
+    <div class="stat"><div class="stat-val" id="s-mocks">0 <span>/ 5</span></div><div class="stat-lbl">Mocks done</div></div>
+    <div class="stat"><div class="stat-val" id="s-pct">0%</div><div class="stat-lbl">Complete</div></div>
+    <div class="stat"><div class="stat-val">Jun 6</div><div class="stat-lbl">Started</div></div>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-header">
+    <span class="progress-title">Overall progress</span>
+    <span class="progress-pct" id="prog-pct">0 of 33 days</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+  <div class="mock-row">
+    <span class="mock-label">Mocks</span>
+    <div class="mpip" id="mp0">1</div><div class="mpip-date">Jul 2</div>
+    <div class="mpip" id="mp1">2</div><div class="mpip-date">Jul 3</div>
+    <div class="mpip" id="mp2">3</div><div class="mpip-date">Jul 5</div>
+    <div class="mpip" id="mp3">4</div><div class="mpip-date">Jul 6</div>
+    <div class="mpip" id="mp4">5</div><div class="mpip-date">Jul 7</div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--storage)"></div>Storage</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--compute)"></div>Compute</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--db)"></div>Database</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--appint)"></div>App Integration</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--security)"></div>Security</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--mgmt)"></div>Management</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--data)"></div>Data &amp; ML</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--migration)"></div>Migration</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--design)"></div>Design for X</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--mock)"></div>Mock exam</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--design);width:3px;border-radius:0"></div>Mon/Tue off days</div>
+</div>
+
+<div class="filter-bar" id="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="storage">Storage</button>
+  <button class="filter-btn" data-filter="compute">Compute</button>
+  <button class="filter-btn" data-filter="db">Database</button>
+  <button class="filter-btn" data-filter="appint">App Integration</button>
+  <button class="filter-btn" data-filter="security">Security</button>
+  <button class="filter-btn" data-filter="mgmt">Management</button>
+  <button class="filter-btn" data-filter="data">Data &amp; ML</button>
+  <button class="filter-btn" data-filter="migration">Migration</button>
+  <button class="filter-btn" data-filter="design">Design for X</button>
+  <button class="filter-btn" data-filter="mock">Mock exams</button>
+</div>
+
+<div class="toolbar">
+  <button class="toolbar-btn" id="expand-all">Expand all</button>
+  <button class="toolbar-btn" id="collapse-all">Collapse all</button>
+  <button class="toolbar-btn" id="reset-btn">Reset progress</button>
+  <span class="toolbar-right" id="filter-label">Showing all phases</span>
+</div>
+
+<div class="main" id="main-container"></div>
+
+<script>
+const PHASES=[
+{id:"storage",label:"Finish Storage — S3 + wrap-up",dates:"Jun 6–8",days:[
+  {d:6,m:"Jun",dow:"Fri",title:"S3 core lessons",tag:"storage",tagLabel:"Storage",lessons:["S3 Overview","S3 demo","S3 Storage Classes","S3 Storage Classes Demo"],note:"Course: Services – Storage",hrs:"~2 hrs",today:true},
+  {d:7,m:"Jun",dow:"Sat",title:"S3 advanced features",tag:"storage",tagLabel:"Storage",lessons:["S3 Versioning + Demo","S3 ACL and Resource Policies + Demo","S3 Static Website Hosting + Demo"],note:"Course: Services – Storage",hrs:"~3 hrs"},
+  {d:8,m:"Jun",dow:"Sun",title:"S3 final + Storage wrap-up",tag:"storage",tagLabel:"Storage",lessons:["S3 Pre-Signed URLs + Demo","S3 Access Points + Demo","AWS Backup","Elastic Disaster Recovery","Storage Gateway"],note:"Completes: Services – Storage",hrs:"~3 hrs"},
+]},
+{id:"compute",label:"Compute — remaining lessons",dates:"Jun 9–11",days:[
+  {d:9,m:"Jun",dow:"Mon",title:"EC2 extras + containers",tag:"compute",tagLabel:"Compute",lessons:["EC2 Image Builder","Elastic Network Interfaces + Demo","Elastic Beanstalk + Demo","Lightsail","ECS + Demo Part 1 & 2"],note:"Course: Services – Compute",hrs:"~4 hrs",offday:true},
+  {d:10,m:"Jun",dow:"Tue",title:"Containers + serverless + edge",tag:"compute",tagLabel:"Compute",lessons:["EKS","ECR + Demo","App Runner","Batch","Lambda + Demo","Serverless Application Model","Amplify"],note:"Course: Services – Compute",hrs:"~4 hrs",offday:true},
+  {d:11,m:"Jun",dow:"Wed",title:"Remaining compute",tag:"compute",tagLabel:"Compute",lessons:["Outposts","ECS/EKS Anywhere","VMware Cloud on AWS","Snow Family (compute focus)"],note:"Completes: Services – Compute",hrs:"~2 hrs"},
+]},
+{id:"db",label:"Database",dates:"Jun 12–15",days:[
+  {d:12,m:"Jun",dow:"Thu",title:"RDS + Aurora + Redshift",tag:"db",tagLabel:"Database",lessons:["Database Agenda and Introduction","AWS RDS","RDS Aurora and Aurora Serverless","RDS Proxy","Redshift Main","Redshift Serverless"],note:"Course: Services – Database",hrs:"~2 hrs"},
+  {d:13,m:"Jun",dow:"Fri",title:"DynamoDB + caching",tag:"db",tagLabel:"Database",lessons:["DynamoDB + Demo","DynamoDB Accelerator (DAX)","ElastiCache","MemoryDB for Redis"],note:"Course: Services – Database",hrs:"~2 hrs"},
+  {d:14,m:"Jun",dow:"Sat",title:"NoSQL + search + remaining DBs",tag:"db",tagLabel:"Database",lessons:["OpenSearch + Demo","DocumentDB","Keyspaces","Neptune","QLDB","Timestream"],note:"Course: Services – Database",hrs:"~3 hrs"},
+  {d:15,m:"Jun",dow:"Sun",title:"Database revision",tag:"db",tagLabel:"Database",lessons:["RDS vs Aurora vs DynamoDB scenarios","Caching patterns: ElastiCache vs DAX vs MemoryDB","Which DB for which use case — decision matrix"],note:"Revision — no new lessons",hrs:"~2 hrs"},
+]},
+{id:"appint",label:"Application Integration",dates:"Jun 16–18",days:[
+  {d:16,m:"Jun",dow:"Mon",title:"Autoscaling + API + messaging",tag:"appint",tagLabel:"App Integration",lessons:["Autoscaling + Demo","API Gateway + Demo","AppFlow","SNS","SQS","SNS/SQS Demo"],note:"Course: Services – Application Integration",hrs:"~4 hrs",offday:true},
+  {d:17,m:"Jun",dow:"Tue",title:"Eventing + workflows + email",tag:"appint",tagLabel:"App Integration",lessons:["Amazon MQ","EventBridge","EventBridge + AWS Config Demo","Simple Email Service","Step Functions","Simple Workflow Service","Managed Apache Airflow"],note:"Completes: Services – Application Integration",hrs:"~3 hrs",offday:true},
+  {d:18,m:"Jun",dow:"Wed",title:"App Integration revision",tag:"appint",tagLabel:"App Integration",lessons:["SQS vs SNS vs EventBridge vs MQ scenarios","Sync vs async patterns","Fan-out patterns","Step Functions vs Airflow — when to use which"],note:"Revision — no new lessons",hrs:"~2 hrs"},
+]},
+{id:"data",label:"Data & ML + Migration & Transfer",dates:"Jun 19–21",days:[
+  {d:19,m:"Jun",dow:"Thu",title:"Data & ML",tag:"data",tagLabel:"Data & ML",lessons:["Kinesis + Demo","Managed Service for Kafka","Glue","EMR","Glue DataBrew","Lake Formation","Athena + Demo","QuickSight","SageMaker","Rekognition + Demo","Polly","Lex","Comprehend","Forecast","Augmented AI","Fraud Detector","Transcribe","Translate + Demo","Textract"],note:"Course: Services – Data and ML  ·  skim AI services after SageMaker",hrs:"~2 hrs"},
+  {d:20,m:"Jun",dow:"Fri",title:"Migration & Transfer",tag:"migration",tagLabel:"Migration",lessons:["Migration intro","Migration Hub","Application Discovery Service","Application Migration Service","Database Migration Service","Elastic Disaster Recovery","AWS Mainframe Modernization","DataSync + Demo","AWS Transfer Family","Snow Family (storage focus)"],note:"Course: Services – Migration and Transfer",hrs:"~2 hrs"},
+  {d:21,m:"Jun",dow:"Sat",title:"Data + Migration revision + buffer",tag:"buffer",tagLabel:"Buffer",lessons:["Kinesis vs MSK vs SQS","Glue vs EMR vs Athena","DMS vs DataSync vs Transfer Family","Snow Family use cases"],note:"Revision + catch-up buffer",hrs:"~2 hrs"},
+]},
+{id:"mgmt",label:"Management & Governance",dates:"Jun 22–24",days:[
+  {d:22,m:"Jun",dow:"Sun",title:"IaC + monitoring",tag:"mgmt",tagLabel:"Management",lessons:["CloudFormation + Demo","CDK + Demo (S3 with Python)","CloudWatch + Demo","X-Ray + Demo","AWS Health Dashboard","Prometheus","Grafana"],note:"Course: Services – Management and Governance",hrs:"~3 hrs"},
+  {d:23,m:"Jun",dow:"Mon",title:"Governance + accounts + operations",tag:"mgmt",tagLabel:"Management",lessons:["Trusted Advisor","Launch Wizard","Compute Optimizer","AWS Organizations","Control Tower + SSO Demo","Systems Manager","Service Catalog","License Manager","Proton"],note:"Course: Services – Management and Governance",hrs:"~4 hrs",offday:true},
+  {d:24,m:"Jun",dow:"Tue",title:"Remaining management + revision",tag:"mgmt",tagLabel:"Management",lessons:["Resource Group and Tag Manager","Resilience Hub","Resource Explorer","Resource Access Manager","Revision: CloudFormation vs CDK · CloudWatch vs X-Ray · Organizations vs Control Tower"],note:"Completes: Services – Management and Governance",hrs:"~3 hrs",offday:true},
+]},
+{id:"security",label:"Security",dates:"Jun 25–27",days:[
+  {d:25,m:"Jun",dow:"Wed",title:"IAM + identity services",tag:"security",tagLabel:"Security",lessons:["IAM + Demo","IAM Demo Roles for EC2","IAM Identity Center SSO + Demo","Cognito","Directory Service","Verified Permissions"],note:"Course: Services – Security",hrs:"~2 hrs"},
+  {d:26,m:"Jun",dow:"Thu",title:"Auditing + encryption + threat detection",tag:"security",tagLabel:"Security",lessons:["CloudTrail + Demo","Config","Artifact","GuardDuty","Inspector","Macie + Demo","Security Hub","KMS","CloudHSM","Certificate Manager","Private Certificate Authority","Secrets Manager"],note:"Course: Services – Security",hrs:"~2 hrs"},
+  {d:27,m:"Jun",dow:"Fri",title:"Network security + Security revision",tag:"security",tagLabel:"Security",lessons:["NACLs and Security Groups","Security Lake","WAF","Shield and Shield Advanced","Network Firewall","Firewall Manager","Full Security revision"],note:"Completes: Services – Security",hrs:"~2 hrs"},
+]},
+{id:"design",label:"Bringing it all together + Design for X",dates:"Jun 28 – Jul 1",days:[
+  {d:28,m:"Jun",dow:"Sat",title:"Bringing it all together",tag:"design",tagLabel:"Design for X",lessons:["Tools for Well-Architected Framework","Preparing for the SAA Mock/Practice Exam","Preparing for the real Exam","The Road ahead on your AWS Journey"],note:"Course: Bringing it all together",hrs:"~2 hrs"},
+  {d:29,m:"Jun",dow:"Sun",title:"Design for Security + Reliability",tag:"design",tagLabel:"Design for X",lessons:["MegaSection intro — The Design for X Portion","Security design principles","7 foundations of security","AWS Shared Responsibility Model","Turning up Security on Network / Storage / Compute / Database / App Integration / Data / Migration / Management / Security services","Reliability intro · Design Principles for Resilience","Models of Disaster Recovery","Turning up Reliability across all service areas"],note:"Course: Designing for Security + Designing for Reliability",hrs:"~3 hrs"},
+  {d:30,m:"Jun",dow:"Mon",title:"Design for Performance + Cost + Challenge",tag:"design",tagLabel:"Design for X",lessons:["Design Principles for Performance","Foundational Areas of Performance Optimization","Design Principles for Costs","Foundation Areas of Cost Optimization","The Ultimate Design Challenge — Intro and Agenda","Applying your Design Skills"],note:"Course: Designing for Performance + Cost + Applying your Design Skills",hrs:"~4 hrs",offday:true},
+  {d:1,m:"Jul",dow:"Tue",title:"Full course rapid revision",tag:"revision",tagLabel:"Revision",lessons:["Rapid pass through all KodeKloud notes pages","Decision trees: which service when","Consolidate weak areas before mocks begin"],note:"Use notes.kodekloud.com for fast revision",hrs:"~4 hrs",offday:true},
+]},
+{id:"mock",label:"5 Mock Exams + Targeted Revision",dates:"Jul 2–7",days:[
+  {d:2,m:"Jul",dow:"Wed",title:"Mock exam 1",tag:"mock",tagLabel:"Mock",lessons:["Full timed sitting","Note every wrong and unsure answer","Do not look anything up during the exam"],note:"KodeKloud SAA built-in mock",hrs:"~2.5 hrs",mock:true},
+  {d:3,m:"Jul",dow:"Thu",title:"Review mock 1 + Mock exam 2",tag:"mock",tagLabel:"Mock",lessons:["Morning: review every wrong answer from mock 1","Revisit KodeKloud notes for those topics","Afternoon: full mock exam 2 sitting"],note:"Use Tutorials Dojo for mock 2",hrs:"~4 hrs",mock:true},
+  {d:4,m:"Jul",dow:"Fri",title:"Review mock 2 + targeted revision",tag:"revision",tagLabel:"Revision",lessons:["Review mock 2 gaps","Focus on Networking · Security · S3 storage classes · DB selection","Highest exam-weight topics only"],note:"Targeted revision — no full lessons",hrs:"~2 hrs"},
+  {d:5,m:"Jul",dow:"Sat",title:"Mock exam 3",tag:"mock",tagLabel:"Mock",lessons:["Full timed sitting","Should be hitting 75%+ by now","Note any recurring weak areas"],note:"Use Whizlabs — different question bank",hrs:"~2.5 hrs",mock:true},
+  {d:6,m:"Jul",dow:"Sun",title:"Review mock 3 + Mock exam 4",tag:"mock",tagLabel:"Mock",lessons:["Morning: quick review of mock 3 gaps","Afternoon: mock exam 4 — full timed sitting","Identify final weak spots · target 80%+"],note:"Use ExamTopics or AWS Skill Builder",hrs:"~4 hrs (split)",mock:true},
+  {d:7,m:"Jul",dow:"Mon",title:"Mock exam 5 + light rest",tag:"mock",tagLabel:"Mock",lessons:["Morning: final mock exam sitting — target 85%+","Brief gap review only","Confirm exam logistics · rest — no heavy studying tonight"],note:"Then stop studying. You are ready.",hrs:"~2.5 hrs then rest",offday:true,mock:true},
+]},
+];
+
+const MOCK_POSITIONS=[];
+let gI=0;
+PHASES.forEach(ph=>ph.days.forEach(d=>{if(d.mock)MOCK_POSITIONS.push(gI);gI++;}));
+const TOTAL=gI;
+
+let checked={};
+try{checked=JSON.parse(localStorage.getItem('aws_notion_v2')||'{}');}catch(e){}
+function save(){try{localStorage.setItem('aws_notion_v2',JSON.stringify(checked));}catch(e){}}
+
+function countDone(){return Object.values(checked).filter(Boolean).length;}
+function countMocks(){return MOCK_POSITIONS.filter(i=>checked[i]).length;}
+
+function updateStats(){
+  const done=countDone(),mocks=countMocks(),pct=Math.round(done/TOTAL*100);
+  document.getElementById('s-done').innerHTML=done+' <span>/ '+TOTAL+'</span>';
+  document.getElementById('s-mocks').innerHTML=mocks+' <span>/ 5</span>';
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=done+' of '+TOTAL+' days';
+  for(let i=0;i<5;i++){const e=document.getElementById('mp'+i);if(e){e.classList.toggle('done',i<mocks);e.textContent=i<mocks?'✓':(i+1);}}
+}
+
+function countdown(){
+  const exam=new Date('2026-07-08T00:00:00'),now=new Date();
+  const diff=Math.ceil((exam-now)/(864e5));
+  const el=document.getElementById('countdown');
+  if(el)el.textContent=diff>0?diff+' days away':diff===0?'Today!':'Exam passed';
+}
+countdown();
+
+let phaseEls=[];
+
+function buildUI(){
+  const container=document.getElementById('main-container');
+  container.innerHTML='';
+  phaseEls=[];
+  let gIdx=0;
+
+  PHASES.forEach(ph=>{
+    const phEl=document.createElement('div');
+    phEl.className='phase';
+    phEl.dataset.phaseId=ph.id;
+    const startIdx=gIdx;
+
+    const doneCount=()=>ph.days.filter((_,di)=>checked[startIdx+di]).length;
+
+    const hdr=document.createElement('div');
+    hdr.className='phase-header';
+    hdr.innerHTML=`<div class="phase-toggle open">▶</div><div class="phase-name">${ph.label}</div><div class="phase-meta">${ph.dates}</div><div class="phase-prog" id="pp-${ph.id}">${doneCount()}/${ph.days.length}</div>`;
+
+    const daysEl=document.createElement('div');
+    daysEl.className='phase-days';
+    daysEl.style.maxHeight='9999px';
+
+    hdr.addEventListener('click',()=>{
+      const tog=hdr.querySelector('.phase-toggle');
+      const isOpen=!daysEl.classList.contains('collapsed');
+      if(isOpen){
+        daysEl.style.maxHeight=daysEl.scrollHeight+'px';
+        requestAnimationFrame(()=>{daysEl.style.maxHeight='0px';daysEl.classList.add('collapsed');tog.classList.remove('open');});
+      } else {
+        daysEl.classList.remove('collapsed');daysEl.style.maxHeight=daysEl.scrollHeight+'px';tog.classList.add('open');
+        setTimeout(()=>{daysEl.style.maxHeight='9999px';},350);
+      }
+    });
+
+    ph.days.forEach((d,di)=>{
+      const i=gIdx+di;
+      const card=document.createElement('div');
+      let cls='day-card';
+      if(checked[i])cls+=' done';
+      if(d.offday&&!d.examday)cls+=' offday';
+      if(d.examday)cls+=' examday';
+      if(d.today)cls+=' today-card';
+      card.className=cls;
+      card.dataset.tag=d.tag;
+
+      const badges=[
+        `<span class="pill tag-${d.tag}">${d.tagLabel}</span>`,
+        d.mock?`<span class="pill pill-mock-badge">exam sitting</span>`:'',
+        d.today?`<span class="pill pill-today">TODAY</span>`:'',
+        d.offday&&!d.examday?`<span class="pill pill-offday">day off</span>`:'',
+      ].join('');
+
+      const lessonsHtml=d.lessons.map((l,li)=>`<span>${l}</span>${li<d.lessons.length-1?'<span class="sep"> · </span>':''}`).join('');
+
+      card.innerHTML=`<div class="card-inner">
+        <div class="date-block"><div class="date-num">${d.d}</div><div class="date-mon">${d.m}</div><div class="date-dow">${d.dow}</div></div>
+        <div class="card-body">
+          <div class="card-title-row"><span class="card-title">${d.title}</span>${badges}</div>
+          <div class="card-lessons">${lessonsHtml}</div>
+          ${d.note?`<div class="card-note">${d.note}</div>`:''}
+          <div class="card-hours">${d.hrs}</div>
+        </div>
+        <div class="check-block"><div class="check-circle ${checked[i]?'checked':''}">${checked[i]?'✓':''}</div></div>
+      </div>`;
+
+      card.addEventListener('click',()=>{
+        checked[i]=!checked[i];save();
+        card.classList.toggle('done',checked[i]);
+        const chk=card.querySelector('.check-circle');
+        chk.classList.toggle('checked',checked[i]);chk.textContent=checked[i]?'✓':'';
+        updateStats();
+        const pp=document.getElementById('pp-'+ph.id);
+        if(pp)pp.textContent=doneCount()+'/'+ph.days.length;
+      });
+
+      daysEl.appendChild(card);
+    });
+
+    phEl.appendChild(hdr);phEl.appendChild(daysEl);container.appendChild(phEl);
+    phaseEls.push({el:phEl,id:ph.id});
+    gIdx+=ph.days.length;
+  });
+
+  const examFinal=document.createElement('div');
+  examFinal.className='exam-final';
+  examFinal.innerHTML=`<div class="exam-final-date">8</div><div><div class="exam-final-sub">July 2026 · Tuesday</div><div class="exam-final-title">AWS Certified Solutions Architect — Associate</div><div class="exam-final-note">SAA-C03 · You have put in the work. Trust your preparation and go get it.</div></div>`;
+  container.appendChild(examFinal);
+}
+
+document.getElementById('filter-bar').addEventListener('click',e=>{
+  const btn=e.target.closest('.filter-btn');if(!btn)return;
+  const f=btn.dataset.filter;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  document.getElementById('filter-label').textContent=f==='all'?'Showing all phases':'Filtering: '+btn.textContent;
+  phaseEls.forEach(({el})=>{
+    if(f==='all'){el.style.display='';}
+    else{const has=Array.from(el.querySelectorAll('.day-card')).some(c=>c.dataset.tag===f);el.style.display=has?'':'none';}
+  });
+});
+
+document.getElementById('expand-all').addEventListener('click',()=>{
+  document.querySelectorAll('.phase-days').forEach(d=>{d.classList.remove('collapsed');d.style.maxHeight='9999px';});
+  document.querySelectorAll('.phase-toggle').forEach(t=>t.classList.add('open'));
+});
+document.getElementById('collapse-all').addEventListener('click',()=>{
+  document.querySelectorAll('.phase-days').forEach(d=>{d.classList.add('collapsed');d.style.maxHeight='0px';});
+  document.querySelectorAll('.phase-toggle').forEach(t=>t.classList.remove('open'));
+});
+document.getElementById('reset-btn').addEventListener('click',()=>{
+  if(!confirm('Reset all progress?'))return;
+  checked={};save();buildUI();updateStats();
+});
+
+buildUI();
+updateStats();
+</script>
+</body>
+</html>
